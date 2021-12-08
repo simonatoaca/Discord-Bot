@@ -9,7 +9,7 @@ import os           # environment variables
 import inspect      # call stack inspection
 import random       # dumb random number generator
 import glob         #to get the files in the dir through globbing
-
+import argparse     #for flags
 from discord.ext import commands    # Bot class and utils
 
 ################################################################################
@@ -150,10 +150,16 @@ async def scram_error(ctx, error):
 ################################################################################
 
 if __name__ == '__main__':
-    # check that token exists in environment
-    if 'BOT_TOKEN' not in os.environ:
-        log_msg('save your token in the BOT_TOKEN env variable!', 'error')
-        exit(-1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--token", type=string, help="pass the bot token")
+    args = parser.parse_args()
+    if args.token:
+            os.environ['BOT_TOKEN'] = args.token
+    else:
+         # check that token exists in environment
+        if 'BOT_TOKEN' not in os.environ:
+            log_msg('save your token in the BOT_TOKEN env variable!', 'error')
+            exit(-1)
 
     # launch bot (blocking operation)
     bot.run(os.environ['BOT_TOKEN'])
